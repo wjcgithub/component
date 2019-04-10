@@ -71,7 +71,6 @@ abstract class AbstractPool
         if($this->poolChannel->isEmpty()){
             //如果还没有达到最大连接数，则尝试进行创建
             if($this->createdNum < $this->conf->getMaxObjectNum()){
-                $this->createdNum++;
                 /*
                  * 创建对象的时候，请加try,尽量不要抛出异常
                  */
@@ -86,6 +85,7 @@ abstract class AbstractPool
                         $this->createdNum--;
                         unset($this->objHash[$hash]);
                     }
+                    $this->createdNum++;
                 }
                 //同样进入调度等待,理论上此处可以马上pop出来
                 $obj = $this->poolChannel->pop($timeout);
